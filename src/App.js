@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const APIurl = "http://crowdbeats-host.herokuapp.com/";
+const APIurl = "https://crowdbeats-host.herokuapp.com/";
 class App extends Component {
   constructor(props){
     super(props);
