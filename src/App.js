@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-// const APIurl = "https://crowdbeats-host.herokuapp.com/";
-const APIurl = "https://localhost:8888/";
+const APIurl = "https://crowdbeats-host.herokuapp.com/";
+// const APIurl = "https://localhost:8888/";
 
 class App extends Component {
   constructor(props){
@@ -19,26 +19,6 @@ class App extends Component {
 
   updatePartyCode(event){
     this.setState({partyCode:event.target.value})
-  }
-  
-  updateSearchQuery(event){
-    this.setState({searchQuery:event.target.value})
-  }
-
-  submitSearchQuery(){
-    fetch(APIurl+"search?party_id="+this.state.partyCode+"search="+this.state.searchQuery)
-    .then(function(response) {
-      // The response is a Response instance.
-      // You parse the data into a useable format using `.json()`
-      return response.json();
-    })
-    .then(
-      (response) => {
-        this.setState
-      }
-
-        )
-      }
   }
 
   submitPartyCode(){
@@ -57,13 +37,35 @@ class App extends Component {
         })
         .then(
           (response) => {
-            this.setState({playlists:response, authFinished:true})
+            this.setState({playlists:response, authFinished:true});
           }
         )
       }
     )
   }
 
+  
+  updateSearchQuery(event){
+    this.setState({searchQuery:event.target.value})
+  }
+
+  submitSearchQuery(){
+    fetch(APIurl+"search?party_id="+this.state.partyCode+"&search="+this.state.searchQuery)
+    .then(function(response) {
+      // The response is a Response instance.
+      // You parse the data into a useable format using `.json()`
+      return response.json();
+    })
+    .then(
+      (response) => {
+        // console.log(response);
+        this.setState({searchResults:response});
+      }
+
+        )
+      }
+
+  
   updateVote(id){
     fetch(APIurl+"vote?id="+id).then(function(response) {
       // The response is a Response instance.
@@ -91,15 +93,21 @@ class App extends Component {
       <Fragment>
         {this.state.playlists.map((item) => (
           <div>
-            <h1>{item.name}</h1>
-            <h1>{item.votes}</h1>
+            <h2>{item.name}</h2>
+            <h2>{item.votes}</h2>
             <button onClick={ () => {this.updateVote(item.id)} }>VOTE</button>
           </div>
         ))
         }
-
-            <input placeholder="Search" value={this.state.searchQuery} onChange={(event) => this.updatePartyCode(event)} />
+            <input placeholder="Search" value={this.state.searchQuery} onChange={(event) => this.updateSearchQuery(event)} />
             <button onClick={() => {this.submitSearchQuery()}}>Submit</button>
+
+        {this.state.searchResults.map((item) => (
+          <div>
+            <h2>{item.name}</h2>
+          </div>
+        ))
+        }
         </Fragment>
     }
          
