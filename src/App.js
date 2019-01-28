@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 const APIurl = "https://crowdbeats-host.herokuapp.com/";
-// const APIurl = "https://localhost:8888/";
+// const APIurl = "http://localhost:8888/";
 
 class App extends Component {
   constructor(props){
@@ -85,7 +85,7 @@ class App extends Component {
       <div className="App">
       {!this.state.authFinished ? 
       <Fragment>
-         <h1>Please Enter Party Code.</h1>
+         <h1>Please Enter Party Code:.</h1>
           <input placeholder="Party Code" value={this.state.partyCode} onChange={(event) => this.updatePartyCode(event)} />
           <button onClick={() => {this.submitPartyCode()}}>Submit</button>
       </Fragment>
@@ -94,7 +94,8 @@ class App extends Component {
         {this.state.playlists.map((item) => (
           <div>
             <h2>{item.name}</h2>
-            <h2>{item.votes}</h2>
+            <h2>Votes: {item.votes}</h2>
+            <h3>by {item.artist}</h3>
             <button onClick={ () => {this.updateVote(item.id)} }>VOTE</button>
           </div>
         ))
@@ -105,6 +106,7 @@ class App extends Component {
         {this.state.searchResults.map((item) => (
           <div>
             <h2>{item.name}</h2>
+            <h3>by {item.artist}</h3>
           </div>
         ))
         }
