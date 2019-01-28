@@ -21,6 +21,19 @@ class App extends Component {
     this.setState({partyCode:event.target.value})
   }
 
+  fetchPlaylist(){
+    fetch(APIurl+"playlist").then(function(response) {
+      // The response is a Response instance.
+      // You parse the data into a useable format using `.json()`
+      return response.json();
+    })
+    .then(
+      (response) => {
+        this.setState({playlists:response, authFinished:true});
+      }
+    )
+  }
+
   submitPartyCode(){
     fetch(APIurl+"newguest?party_id="+this.state.partyCode)
     .then(function(response) {
@@ -30,19 +43,12 @@ class App extends Component {
     })
     .then(
       (response) => {
-        fetch(APIurl+"playlist").then(function(response) {
-          // The response is a Response instance.
-          // You parse the data into a useable format using `.json()`
-          return response.json();
-        })
-        .then(
-          (response) => {
-            this.setState({playlists:response, authFinished:true});
-          }
-        )
+        this.fetchPlaylist();
       }
     )
   }
+
+
 
   
   updateSearchQuery(event){
@@ -67,7 +73,7 @@ class App extends Component {
 
   
   updateVote(id){
-    fetch(APIurl+"vote?id="+id).then(function(response) {
+    fetch(APIurl+"vote?id="+id).then(function(response){
       // The response is a Response instance.
       // You parse the data into a useable format using `.json()`
       return response.json();
@@ -79,6 +85,17 @@ class App extends Component {
     )
   }
 
+  addsong(id){
+    fetch(APIurl+"addsong?id=spotify:track:"+id).then(function(response){
+      return response.json();
+    })
+    .then(
+      (response) => {
+        alert("added song");
+        this.fetchPlaylist();
+      }
+    )
+    }
 
   render() {
     return (
@@ -101,12 +118,14 @@ class App extends Component {
         ))
         }
             <input placeholder="Search" value={this.state.searchQuery} onChange={(event) => this.updateSearchQuery(event)} />
-            <button onClick={() => {this.submitSearchQuery()}}>Submit</button>
+            <button onClick={() => {this.submitSearchQuery()}}>Search</button>
 
         {this.state.searchResults.map((item) => (
           <div>
             <h2>{item.name}</h2>
             <h3>by {item.artist}</h3>
+            <button onClick={() => {this.addsong(item.id)}}>Add Song</button>
+
           </div>
         ))
         }
