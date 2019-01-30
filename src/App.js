@@ -86,7 +86,7 @@ class App extends Component {
   }
 
   addsong(id){
-    fetch(APIurl+"addsong?id=spotify:track:"+id).then(function(response){
+    fetch(APIurl+"addsong?id="+id).then(function(response){
       return response.json();
     })
     .then(
